@@ -1,0 +1,93 @@
+#include "shader.h"
+
+#include <string>
+#include <iostream>
+
+
+bool Shader::Load(std::ifstream file, GLenum type) {
+    GLuint shaderid = glCreateShader(type);
+
+    std::string source((std::istreambuf_iterator<char>(file)),
+            (std::istreambuf_iterator<char>()));
+
+    char const* source_p = source.c_str();
+    glShaderSource(shaderid, 1, &source_p, NULL);
+    glCompileShader(shaderid);
+
+    GLint success = 0;
+    glGetShaderiv(shaderid, GL_COMPILE_STATUS, &success);
+    if (success == GL_FALSE) {
+        GLint errorLength = 0;
+        glGetShaderiv(shaderid, GL_INFO_LOG_LENGTH, &errorLength);
+
+        std::vector<GLchar> errorLog(errorLength);
+        glGetShaderInfoLog(shaderid, errorLength, &errorLength, &errorLog[0]);
+
+        std::cerr << "Compile error: ";
+        for (auto i: errorLog) {
+            std::cerr << i;
+        }
+
+        glDeleteShader(shaderid);
+        return false;
+    }
+
+    ids.push_back(shaderid);
+    return true;
+}
+
+bool Shader::Link() {
+    programid = glCreateProgram();
+    for (auto shaderid: ids) {
+        glAttachShader(programid, shaderid);
+    }
+    glLinkProgram(programid);
+
+    GLint success = 0;
+    glGetProgramiv(programid, GL_LINK_STATUS, (int *)&success);
+    if (success == GL_FALSE) {
+        GLint maxLength = 0;
+        glGetProgramiv(programid, GL_INFO_LOG_LENGTH, &maxLength);
+
+        std::vector<GLchar> infoLog(maxLength);
+        glGetProgramInfoLog(programid, maxLength, &maxLength, &infoLog[0]);
+
+        std::cerr << "Linking error: ";
+        for (auto i: infoLog) {
+            std::cerr << i;
+        }
+
+        for (auto s: ids) {
+            glDeleteShader(s);
+        }
+
+        glDeleteProgram(programid);
+        return false;
+    }
+
+    for (auto s: ids) {
+        glDetachShader(programid, s);
+        glDeleteShader(s);
+    }
+
+    ids.clear();
+    return true;
+}
+
+void Shader::Use() {
+    glUseProgram(programid);
+}
+
+void Shader::Set_uniformm4fv(const GLchar* uniform, glm::mat4 matrix) {
+    GLuint matrixID = glGetUniformLocation(programid, uniform);
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &matrix[0][0]);
+}
+
+void Shader::Set_uniform1f(const GLchar* uniform, GLfloat value) {
+    GLuint valueID = glGetUniformLocation(programid, uniform);
+    glUniform1f(valueID, value);
+}
+
+GLuint Shader::GetID() {
+    return programid;
+}

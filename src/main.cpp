@@ -25,12 +25,12 @@ init_params() {
     Params p;
 
     // hair
-    p.Add("strands", 10000.0f);
+    p.Add("strands", 1000.0f);
     p.Add("segments", 5.0f);
     p.Add("length", 0.5f);
 
     // wind
-    p.Add("direction", 2.1f);
+    p.Add("direction", 0.0f);
     p.Add("speed", 1.0f);
     p.Add("strength", 1.0f);
 

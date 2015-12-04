@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include <stdio.h>
 
@@ -46,13 +47,17 @@ void Controller::Get_input() {
                 reload_scene();
             }
             else {
-                if (!settings->Exists(entry)) {
+                if (entry == "list") {
+                    std::cout << std::endl << "Current editable settings:" << std::endl;
+                    std::vector<std::string> list = settings->Get_params();
+                    for (auto i : list) {
+                        std::cout << i << " : "<< settings->Get_value(i) << std::endl;
+                    }
+                } else if (!settings->Exists(entry)) {
                     glfwSetWindowTitle(win, "No such setting.");
                 } else {
                     editingValue = entry;
-                    std::stringstream sstm;
-                    sstm << "Enter new value (current: " << settings->Get_value(entry) << ")";
-                    glfwSetWindowTitle(win, sstm.str().c_str());
+                    glfwSetWindowTitle(win, "Enter new value");
                 }
             }
             entry.clear();

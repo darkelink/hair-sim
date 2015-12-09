@@ -104,4 +104,8 @@ void Controller::reload_scene() {
         (int)settings->Get_value("strands"),
         (int)settings->Get_value("segments"),
         settings->Get_value("length"));
+
+    camera->Set_fov(settings->Get_value("fov"));
+
+    glLineWidth(settings->Get_value("width"));
 }

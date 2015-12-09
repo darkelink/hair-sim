@@ -8,6 +8,8 @@ uniform mat4 MVP;
 uniform float direction;
 uniform float time;
 uniform float strength;
+uniform float frequency;
+uniform int iterations;
 
 
 // noise by Morgan McGuire @morgan3d http://graphicscodex.com
@@ -32,14 +34,26 @@ float noise(vec3 x) {
 }
 
 
+
+float fract_brownian(vec3 pos) {
+    float freq = frequency;
+    float total = 0.0;
+    float amp = 0.5;
+    for (int i = 0; i < iterations; ++i) {
+        total += amp * noise(pos * freq);
+        freq *= 2;
+        amp /= 2;
+    }
+    return total;
+}
+
+
 void main() {
-    float displacement = height * strength * noise(vec3(pos.x-time, height, pos.y-time));
-    vec2 off = vec2(displacement * cos(direction), displacement * sin(direction));
-    float mag = length(off);
+    float displacement = height * strength * fract_brownian(vec3(pos.x-time, height, pos.y-time));
 
     gl_Position = MVP * vec4(
-            pos.x + off.x,
-            sqrt(height*height - mag*mag),
-            pos.y + off.y,
+            pos.x + displacement*cos(direction),
+            sqrt(height*height - displacement*displacement),
+            pos.y + displacement*sin(direction),
             1);
 }

@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-
+#include <glm/gtc/type_ptr.hpp>
 
 bool Shader::Load(std::ifstream file, GLenum type) {
     GLuint shaderid = glCreateShader(type);
@@ -38,7 +38,7 @@ bool Shader::Load(std::ifstream file, GLenum type) {
 
 bool Shader::Link() {
     programid = glCreateProgram();
-    for (auto shaderid: ids) {
+    for (auto shaderid : ids) {
         glAttachShader(programid, shaderid);
     }
     glLinkProgram(programid);
@@ -80,12 +80,22 @@ void Shader::Use() {
 
 void Shader::Set_uniformm4fv(const GLchar* uniform, glm::mat4 matrix) {
     GLuint matrixID = glGetUniformLocation(programid, uniform);
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &matrix[0][0]);
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::Set_uniform1f(const GLchar* uniform, GLfloat value) {
     GLuint valueID = glGetUniformLocation(programid, uniform);
     glUniform1f(valueID, value);
+}
+
+void Shader::Set_uniform4f(const GLchar* uniform, glm::vec4 value) {
+    GLuint valueID = glGetUniformLocation(programid, uniform);
+    glUniform4fv(valueID, 1, glm::value_ptr(value));
+}
+
+void Shader::Set_uniform1i(const GLchar* uniform, GLint value) {
+    GLuint valueID = glGetUniformLocation(programid, uniform);
+    glUniform1i(valueID, value);
 }
 
 GLuint Shader::GetID() {

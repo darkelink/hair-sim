@@ -24,15 +24,30 @@ Params
 init_params() {
     Params p;
 
+    p.Add("fov", 45.0f);
+
+    p.Add("floor_red", 0.1f);
+    p.Add("floor_green", 0.04f);
+    p.Add("floor_blue", 0.02f);
+    p.Add("floor_alpha", 1.0f);
+
     // hair
     p.Add("strands", 1000.0f);
     p.Add("segments", 5.0f);
     p.Add("length", 0.5f);
+    p.Add("width", 1.0f);
+
+    p.Add("hair_red", 0.3f);
+    p.Add("hair_green", 0.1f);
+    p.Add("hair_blue", 0.05f);
+    p.Add("hair_alpha", 0.3f);
 
     // wind
     p.Add("direction", 0.0f);
     p.Add("speed", 1.0f);
     p.Add("strength", 1.0f);
+    p.Add("frequency", 1.0f);
+    p.Add("iterations", 5.0f);
 
     return p;
 }
@@ -71,8 +86,8 @@ main(int argc, char* argv[]) {
     std::cout << "OpenGL version: " << version << std::endl;
 
     glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glfwPollEvents();
 
@@ -88,12 +103,12 @@ main(int argc, char* argv[]) {
 
     Shader floorShader;
     floorShader.Load(std::ifstream("res/shaders/basic.vert.glsl"), GL_VERTEX_SHADER);
-    floorShader.Load(std::ifstream("res/shaders/basic.frag.glsl"), GL_FRAGMENT_SHADER);
+    floorShader.Load(std::ifstream("res/shaders/passthrough.frag.glsl"), GL_FRAGMENT_SHADER);
     floorShader.Link();
 
     Shader hairShader;
     hairShader.Load(std::ifstream("res/shaders/hair.vert.glsl"), GL_VERTEX_SHADER);
-    hairShader.Load(std::ifstream("res/shaders/hair.frag.glsl"), GL_FRAGMENT_SHADER);
+    hairShader.Load(std::ifstream("res/shaders/passthrough.frag.glsl"), GL_FRAGMENT_SHADER);
     hairShader.Link();
 
     Camera camera;
@@ -120,6 +135,11 @@ main(int argc, char* argv[]) {
 
         floorShader.Use();
         floorShader.Set_uniformm4fv("MVP", camera.mvp);
+        floorShader.Set_uniform4f("mycolor", glm::vec4(
+            params.Get_value("floor_red"),
+            params.Get_value("floor_green"),
+            params.Get_value("floor_blue"),
+            params.Get_value("floor_alpha")));
         scene.Draw_floor();
 
         hairShader.Use();
@@ -127,6 +147,14 @@ main(int argc, char* argv[]) {
         hairShader.Set_uniform1f("direction", params.Get_value("direction"));
         hairShader.Set_uniform1f("time", currentTime * params.Get_value("speed"));
         hairShader.Set_uniform1f("strength", params.Get_value("strength"));
+        hairShader.Set_uniform1f("frequency", params.Get_value("frequency"));
+        hairShader.Set_uniform1i("iterations", (int)params.Get_value("iterations"));
+
+        hairShader.Set_uniform4f("mycolor", glm::vec4(
+            params.Get_value("hair_red"),
+            params.Get_value("hair_green"),
+            params.Get_value("hair_blue"),
+            params.Get_value("hair_alpha")));
         scene.Draw_hair();
 
         glfwSwapBuffers(window);

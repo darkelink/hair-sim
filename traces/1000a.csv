@@ -1,0 +1,37 @@
+﻿Event,Description,Context,CPU µs,GPU µs,Thread,Queue
+0,(Start of Capture),0x02013580,3780968,-,1124,-
+1,void glClear(),0x02013580,11,-,1124,-
+2,void glUseProgram(),0x02013580,3,-,1124,-
+3,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+4,void glUniformMatrix4fv(),0x02013580,<1,-,1124,-
+5,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+6,void glUniform4fv(),0x02013580,<1,-,1124,-
+7,void glEnableVertexAttribArray(),0x02013580,<1,-,1124,-
+8,void glBindBuffer(),0x02013580,<1,-,1124,-
+9,void glVertexAttribPointer(),0x02013580,<1,-,1124,-
+10,void glDrawElements(),0x02013580,2,3,1124,-
+11,void glDisableVertexAttribArray(),0x02013580,<1,-,1124,-
+12,void glUseProgram(),0x02013580,1,-,1124,-
+13,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+14,void glUniformMatrix4fv(),0x02013580,<1,-,1124,-
+15,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+16,void glUniform1f(),0x02013580,<1,-,1124,-
+17,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+18,void glUniform1f(),0x02013580,<1,-,1124,-
+19,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+20,void glUniform1f(),0x02013580,<1,-,1124,-
+21,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+22,void glUniform1f(),0x02013580,<1,-,1124,-
+23,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+24,void glUniform1i(),0x02013580,<1,-,1124,-
+25,GLint glGetUniformLocation(),0x02013580,<1,-,1124,-
+26,void glUniform4fv(),0x02013580,<1,-,1124,-
+27,void glEnableVertexAttribArray(),0x02013580,<1,-,1124,-
+28,void glBindBuffer(),0x02013580,<1,-,1124,-
+29,void glVertexAttribPointer(),0x02013580,<1,-,1124,-
+30,void glEnableVertexAttribArray(),0x02013580,<1,-,1124,-
+31,void glBindBuffer(),0x02013580,<1,-,1124,-
+32,void glVertexAttribPointer(),0x02013580,<1,-,1124,-
+33,void glVertexAttribDivisor(),0x02013580,<1,-,1124,-
+34,void glDrawArraysInstanced(),0x02013580,4,28,1124,-
+35,void glXSwapBuffers(),0x02013580,31,-,1124,-

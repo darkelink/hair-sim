@@ -49,11 +49,14 @@ float fract_brownian(vec3 pos) {
 
 
 void main() {
-    float displacement = height * strength * fract_brownian(vec3(pos.x-time, height, pos.y-time));
+    float cd = cos(direction);
+    float sd = sin(direction);
+
+    float displacement = height * strength * fract_brownian(vec3(pos.x-cd*time, height, pos.y-sd*time));
 
     gl_Position = MVP * vec4(
-            pos.x + displacement*cos(direction),
+            pos.x + displacement*cd,
             sqrt(height*height - displacement*displacement),
-            pos.y + displacement*sin(direction),
+            pos.y + displacement*sd,
             1);
 }
